@@ -21,19 +21,3 @@ steps:
     - 'CLOUDSDK_CONTAINER_CLUSTER=hello-cluster'
 options:
  logging: CLOUD_LOGGING_ONLY
-
-steps:
-# Build the Docker image
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'us-east1-docker.pkg.dev/$PROJECT_ID/my-repository/sample-app:$COMMIT_SHA', '.']
-# Push the Docker image to Artifact Registry
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'us-east1-docker.pkg.dev/$PROJECT_ID/my-repository/sample-app:$COMMIT_SHA']
-# Deploy to the GKE dev namespace
-- name: 'gcr.io/cloud-builders/gke-deploy'
-  args:
-  - run
-  - --image=us-east1-docker.pkg.dev/$PROJECT_ID/my-repository/sample-app:$COMMIT_SHA
-  - --location=us-east1-c
-  - --cluster=hello-cluster
-  - --namespace=dev
